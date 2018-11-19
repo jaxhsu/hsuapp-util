@@ -23,7 +23,7 @@ public class RegexUtil {
 		while (m.find()) {
 			String new_str = m.group();
 			// 增加前後符號
-			new_str = "<![CDATA[" + new_str + "]]>";
+			new_str = pre_mark + new_str + last_mark;
 			m.appendReplacement(new_content, Matcher.quoteReplacement(new_str));
 		}
 		m.appendTail(new_content);
