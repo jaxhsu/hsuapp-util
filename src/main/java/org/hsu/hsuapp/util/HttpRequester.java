@@ -310,7 +310,8 @@ public class HttpRequester {
 //			params.put("owner", "TESTPORTAL003");
 			HttpRequester request = new HttpRequester();
 			// request.defaultContentEncoding = "UTF-8";
-			String hr = request.sendGet("http://203.64.154.30/AdminPortal/addTodolist", params);
+			//String hr = request.sendGet("http://203.64.154.30/AdminPortal/addTodolist", params);
+			String hr = request.sendGet("http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4", params);
 			System.out.println("============: " + hr);
 		} catch (Exception e) {
 			e.printStackTrace();

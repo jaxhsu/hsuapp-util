@@ -27,7 +27,7 @@ public class JaxbUtilTest {
 		jaxbUtil = new JaxbUtil();
 	}
 
-	// @Test
+	@Test
 	public void pojoToxmlStr() {
 		RootClass rc = new RootClass();
 		EleClassA a = new EleClassA();
@@ -59,7 +59,7 @@ public class JaxbUtilTest {
 			//
 			// System.out.println(writer.toString());
 
-			String xmlStr = jaxbUtil.bean2XmlStr(RootClass.class, rc, "UTF-8");
+			String xmlStr = jaxbUtil.beanToXml(rc);
 			System.out.println(xmlStr);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,7 +104,7 @@ public class JaxbUtilTest {
 
 	}
 
-	@Test
+	//@Test
 	public void xmlStrToPojo() {
 		String xmlString = "<employee>" +
 	            "    <department>" +
@@ -116,7 +116,7 @@ public class JaxbUtilTest {
 	            "    <lastName>Gupta</lastName>" +
 	            "</employee>";
 
-		Employee employee = (Employee) jaxbUtil.xmlStr2Bean(Employee.class, xmlString);
+		Employee employee = (Employee) jaxbUtil.xmlToBean(xmlString, Employee.class);
 		System.out.println(employee);
 
 	}
