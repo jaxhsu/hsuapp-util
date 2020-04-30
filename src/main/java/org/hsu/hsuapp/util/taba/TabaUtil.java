@@ -14,7 +14,67 @@ public class TabaUtil {
 
 	private static String SCRIPT_FILE_PATH = "C:\\Users\\USER\\Downloads\\taba";
 	private static String SCRIPT_FILE_NAME = "test.js";
-	private static String[] REMOVE_CHAR = new String[] { "#", "" };
+	private static String[] REMOVE_CHAR = new String[] { "#", "　", " " };
+	
+	/**
+	 * 顯示 cxx 內容
+	 * 
+	 * @param dataList
+	 */
+	public static void show_cxx_data(List<Map<String,Object>> dataList) {
+		for (int idx = 0; idx < dataList.size(); idx++) {
+			show_cxx_data(dataList.get(idx));
+		}		
+	}
+	
+	/**
+	 * 顯示 cxx 內容
+	 * 
+	 * @param dataMap
+	 */
+	public static void show_cxx_data(Map<String, Object> dataMap) {
+		String id = MapUtil.getString(dataMap, "id", "");
+		System.out.println("id=" + id);
+
+		List<Map<String, Object>> script_data = dataMap.get("script") != null ? (List) dataMap.get("script")
+				: new LinkedList<Map<String, Object>>();
+		System.out.println("script size=" + script_data.size());
+
+		for (int idx = 0; idx < script_data.size(); idx++) {
+			show_script_data(script_data.get(idx));
+		}
+	}
+
+	/**
+	 * 顯示 cxx中 script 的內容
+	 * 
+	 * @param dataMap
+	 */
+	public static void show_script_data(Map<String, Object> dataMap) {
+
+		String type = MapUtil.getString(dataMap, "type", "");
+		String name = MapUtil.getString(dataMap, "name", "");
+		String text = MapUtil.getString(dataMap, "text", "");
+
+		if ("TXT".equals(type)) {
+			System.out.println("type=" + type);
+			System.out.println("name=" + name);
+			System.out.println("text=" + remove_char(text));
+		}
+	}
+	
+	/**
+	 * 移除影響翻譯的字符
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String remove_char(String str) {
+		for (int i = 0; i < REMOVE_CHAR.length; i++) {
+			str = str.replaceAll(REMOVE_CHAR[i], "");
+		}
+		return str;
+	}
 	
 	public static void main(String[] args) {
 		
@@ -45,52 +105,5 @@ public class TabaUtil {
 			}
 		}
 		
-	}
-	
-	public static void show_cxx_data(List<Map<String,Object>> dataList) {
-		for (int idx = 0; idx < dataList.size(); idx++) {
-			show_cxx_data(dataList.get(idx));
-		}		
-	}
-	
-	public static void show_cxx_data(Map<String, Object> dataMap) {
-		String id = MapUtil.getString(dataMap, "id", "");
-		System.out.println("id=" + id);
-
-		List<Map<String, Object>> script_data = dataMap.get("script") != null ? (List) dataMap.get("script")
-				: new LinkedList<Map<String, Object>>();
-		System.out.println("script size=" + script_data.size());
-
-		for (int idx = 0; idx < script_data.size(); idx++) {
-			show_script_data(script_data.get(idx));
-		}
-	}
-
-	public static void show_script_data(Map<String, Object> dataMap) {
-
-		String type = MapUtil.getString(dataMap, "type", "");
-		String name = MapUtil.getString(dataMap, "name", "");
-		String text = MapUtil.getString(dataMap, "text", "");
-
-		if ("TXT".equals(type)) {
-			System.out.println("type=" + type);
-			System.out.println("name=" + name);
-			System.out.println("text=" + remove_char(text));
-		}
-	}
-	
-	/**
-	 * 移除影響翻譯的字符
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static String remove_char(String str) {
-		for (int i = 0; i < REMOVE_CHAR.length; i++) {
-			str = str.replaceAll(REMOVE_CHAR[i], "");
-		}
-		return str;
-	}
-	
-	
+	}	
 }
