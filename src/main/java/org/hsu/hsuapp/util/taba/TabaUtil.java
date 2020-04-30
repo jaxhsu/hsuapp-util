@@ -14,7 +14,8 @@ public class TabaUtil {
 
 	private static String SCRIPT_FILE_PATH = "C:\\Users\\USER\\Downloads\\taba";
 	private static String SCRIPT_FILE_NAME = "test.js";
-
+	private static String[] REMOVE_CHAR = new String[] { "#", "" };
+	
 	public static void main(String[] args) {
 		
 		String charsetName = "UTF-8";
@@ -34,7 +35,7 @@ public class TabaUtil {
 		for (int idx = 0; idx < list.size(); idx++) {
 			Object obj = list.get(idx);
 			if (obj instanceof Map) {
-				//show_cxx_data((Map) obj);
+				show_cxx_data((Map) obj);
 			}
 			else if (obj instanceof List) {
 				show_cxx_data((List) obj);
@@ -74,9 +75,21 @@ public class TabaUtil {
 		if ("TXT".equals(type)) {
 			System.out.println("type=" + type);
 			System.out.println("name=" + name);
-			System.out.println("text=" + text);
+			System.out.println("text=" + remove_char(text));
 		}
-
+	}
+	
+	/**
+	 * 移除影響翻譯的字符
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String remove_char(String str) {
+		for (int i = 0; i < REMOVE_CHAR.length; i++) {
+			str = str.replaceAll(REMOVE_CHAR[i], "");
+		}
+		return str;
 	}
 	
 	
