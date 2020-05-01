@@ -55,7 +55,7 @@ public class BaiduTransApi {
 		String securityKey = "PZtwy_mAh5WdXfsDC_J8";
 		BaiduTransApi BaiduTransApi = new BaiduTransApi(appid, securityKey);
 		
-		String q = "「ねぇ、ほら……いまも戦場と同じ気分よ。##　気分が高揚してて、身体も……ふふっ、##　熱くなっちゃって、たまんないわ……」";
+		String q = "終わりのない調教の日々、繰り返されるアナルレイプ、処女であるにも関わらず覚え込まされた子宮快楽。";
 		q = q.replaceAll("#", "");
 		
 		String from = "jp";
