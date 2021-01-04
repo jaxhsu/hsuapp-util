@@ -32,6 +32,18 @@ public class JacksonUtil {
 	 * @param prototype
 	 * @return
 	 */
+	public static <T> T[] getEntityArray(String jsonString, Class<T[]> prototype) {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			return (T[]) objectMapper.readValue(jsonString, prototype);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public static <T> T getEntity(String jsonString, Class<T> prototype) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -42,7 +54,7 @@ public class JacksonUtil {
 		}
 		
 		return null;
-	}
+	}	
 	
 	/**
 	 * 
