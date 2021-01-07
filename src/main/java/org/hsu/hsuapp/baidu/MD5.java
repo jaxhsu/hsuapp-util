@@ -1,4 +1,4 @@
-package org.hsu.hsuapp.util.baidu;
+package org.hsu.hsuapp.baidu;
 
 import java.io.File;
 import java.io.FileInputStream;

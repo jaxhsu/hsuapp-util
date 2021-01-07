@@ -1,10 +1,13 @@
 package org.hsu.hsuapp.util;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.Character.UnicodeBlock;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,9 +15,17 @@ import java.util.regex.Pattern;
  * <h2>字符串工具類，提供一些字符串相關的便捷方法</h2>
  */
 public class StringUtil {
-	
+
+	static Set<UnicodeBlock> japaneseUnicodeBlocks = new HashSet<UnicodeBlock>() {
+		{
+			add(UnicodeBlock.HIRAGANA);
+			add(UnicodeBlock.KATAKANA);
+			add(UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS);
+		}
+	};
+
 	public StringUtil() {
-		
+
 	}
 
 	/**
@@ -25,8 +36,8 @@ public class StringUtil {
 	 */
 	public static String delFirstZero(String str) {
 		return str.replaceFirst("^0*", "");
-	}	
-	
+	}
+
 	/**
 	 * is null or its length is 0 or it is made by space
 	 *
@@ -40,8 +51,7 @@ public class StringUtil {
 	 * isBlank(&quot;a b&quot;) = false;
 	 * </pre>
 	 *
-	 * @param str
-	 *            str
+	 * @param str str
 	 * @return if string is null or its size is 0 or it is made by space, return
 	 *         true, else return false.
 	 */
@@ -59,10 +69,8 @@ public class StringUtil {
 	 * isEmpty(&quot;  &quot;) = false;
 	 * </pre>
 	 *
-	 * @param str
-	 *            str
-	 * @return if string is null or its size is 0, return true, else return
-	 *         false.
+	 * @param str str
+	 * @return if string is null or its size is 0, return true, else return false.
 	 */
 	public static boolean isEmpty(CharSequence str) {
 
@@ -78,8 +86,7 @@ public class StringUtil {
 	 * length(\"abc\") = 3;
 	 * </pre>
 	 *
-	 * @param str
-	 *            str
+	 * @param str str
 	 * @return if str is null or empty, return 0, else return
 	 *         {@link CharSequence#length()}.
 	 */
@@ -97,8 +104,7 @@ public class StringUtil {
 	 * nullStrToEmpty(&quot;aa&quot;) = &quot;aa&quot;;
 	 * </pre>
 	 *
-	 * @param str
-	 *            str
+	 * @param str str
 	 * @return String
 	 */
 	public static String nullStrToEmpty(Object str) {
@@ -107,8 +113,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param str
-	 *            str
+	 * @param str str
 	 * @return String
 	 */
 	public static String capitalizeFirstLetter(String str) {
@@ -125,8 +130,7 @@ public class StringUtil {
 	/**
 	 * encoded in utf-8
 	 *
-	 * @param str
-	 *            字符串
+	 * @param str 字符串
 	 * @return 返回一個utf8的字符串
 	 */
 	public static String utf8Encode(String str) {
@@ -142,8 +146,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param href
-	 *            字符串
+	 * @param href 字符串
 	 * @return 返回一個html
 	 */
 	public static String getHrefInnerHtml(String href) {
@@ -162,8 +165,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param source
-	 *            字符串
+	 * @param source 字符串
 	 * @return 返回htmL到字符串
 	 */
 	public static String htmlEscapeCharsToString(String source) {
@@ -174,8 +176,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param s
-	 *            str
+	 * @param s str
 	 * @return String
 	 */
 	public static String fullWidthToHalfWidth(String s) {
@@ -200,8 +201,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param s
-	 *            字符串
+	 * @param s 字符串
 	 * @return 返回的數值
 	 */
 	public static String halfWidthToFullWidth(String s) {
@@ -226,8 +226,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * @param str
-	 *            資源
+	 * @param str 資源
 	 * @return 特殊字符串切換
 	 */
 
@@ -245,8 +244,7 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串是否為null或者是空的
 	 *
-	 * @param string
-	 *            給定的字符串
+	 * @param string 給定的字符串
 	 */
 	public static boolean isEmpty(String string) {
 		return string == null || "".equals(string.trim());
@@ -255,8 +253,7 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串是否不為null且不為空
 	 *
-	 * @param string
-	 *            給定的字符串
+	 * @param string 給定的字符串
 	 */
 	public static boolean isNotEmpty(String string) {
 		return !isEmpty(string);
@@ -265,8 +262,7 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串數組中的所有字符串是否都為null或者是空的
 	 *
-	 * @param strings
-	 *            給定的字符串
+	 * @param strings 給定的字符串
 	 */
 	public static boolean isEmpty(String... strings) {
 		boolean result = true;
@@ -282,8 +278,7 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串數組中是否全部都不為null且不為空
 	 *
-	 * @param strings
-	 *            給定的字符串數組
+	 * @param strings 給定的字符串數組
 	 * @return 是否全部都不為null且不為空
 	 */
 	public static boolean isNotEmpty(String... strings) {
@@ -307,12 +302,9 @@ public class StringUtil {
 	/**
 	 * 在給定的字符串中，用新的字符替換所有舊的字符
 	 *
-	 * @param string
-	 *            給定的字符串
-	 * @param oldchar
-	 *            舊的字符
-	 * @param newchar
-	 *            新的字符
+	 * @param string  給定的字符串
+	 * @param oldchar 舊的字符
+	 * @param newchar 新的字符
 	 * @return 替換後的字符串
 	 */
 	public static String replace(String string, char oldchar, char newchar) {
@@ -329,10 +321,8 @@ public class StringUtil {
 	/**
 	 * 把給定的字符串用給定的字符分割
 	 *
-	 * @param string
-	 *            給定的字符串
-	 * @param ch
-	 *            給定的字符
+	 * @param string 給定的字符串
+	 * @param ch     給定的字符
 	 * @return 分割後的字符串數組
 	 */
 	public static String[] split(String string, char ch) {
@@ -357,8 +347,7 @@ public class StringUtil {
 	/**
 	 * 計算給定的字符串的長度，計算規則是：一個漢字的長度為2，一個字符的長度為1
 	 *
-	 * @param string
-	 *            給定的字符串
+	 * @param string 給定的字符串
 	 * @return 長度
 	 */
 	public static int countLength(String string) {
@@ -407,10 +396,8 @@ public class StringUtil {
 	/**
 	 * 刪除給定字符串中所有的舊的字符
 	 *
-	 * @param string
-	 *            源字符串
-	 * @param ch
-	 *            要刪除的字符
+	 * @param string 源字符串
+	 * @param ch     要刪除的字符
 	 * @return 刪除後的字符串
 	 */
 	public static String removeChar(String string, char ch) {
@@ -426,10 +413,8 @@ public class StringUtil {
 	/**
 	 * 刪除給定字符串中給定位置處的字符
 	 *
-	 * @param string
-	 *            給定字符串
-	 * @param index
-	 *            給定位置
+	 * @param string 給定字符串
+	 * @param index  給定位置
 	 */
 	public static String removeChar(String string, int index) {
 		String result = null;
@@ -448,12 +433,9 @@ public class StringUtil {
 	/**
 	 * 刪除給定字符串中給定位置處的字符
 	 *
-	 * @param string
-	 *            給定字符串
-	 * @param index
-	 *            給定位置
-	 * @param ch
-	 *            如果同給定位置處的字符相同，則將給定位置處的字符刪除
+	 * @param string 給定字符串
+	 * @param index  給定位置
+	 * @param ch     如果同給定位置處的字符相同，則將給定位置處的字符刪除
 	 */
 	public static String removeChar(String string, int index, char ch) {
 		String result = null;
@@ -476,8 +458,7 @@ public class StringUtil {
 	/**
 	 * 對給定的字符串進行空白過濾
 	 *
-	 * @param string
-	 *            給定的字符串
+	 * @param string 給定的字符串
 	 * @return 如果給定的字符串是一個空白字符串，那麽返回null；否則返回本身。
 	 */
 	public static String filterBlank(String string) {
@@ -491,12 +472,9 @@ public class StringUtil {
 	/**
 	 * 將給定字符串中給定的區域的字符轉換成小寫
 	 *
-	 * @param str
-	 *            給定字符串中
-	 * @param beginIndex
-	 *            開始索引（包括）
-	 * @param endIndex
-	 *            結束索引（不包括）
+	 * @param str        給定字符串中
+	 * @param beginIndex 開始索引（包括）
+	 * @param endIndex   結束索引（不包括）
 	 * @return 新的字符串
 	 */
 	public static String toLowerCase(String str, int beginIndex, int endIndex) {
@@ -507,12 +485,9 @@ public class StringUtil {
 	/**
 	 * 將給定字符串中給定的區域的字符轉換成大寫
 	 *
-	 * @param str
-	 *            給定字符串中
-	 * @param beginIndex
-	 *            開始索引（包括）
-	 * @param endIndex
-	 *            結束索引（不包括）
+	 * @param str        給定字符串中
+	 * @param beginIndex 開始索引（包括）
+	 * @param endIndex   結束索引（不包括）
 	 * @return 新的字符串
 	 */
 	public static String toUpperCase(String str, int beginIndex, int endIndex) {
@@ -523,8 +498,7 @@ public class StringUtil {
 	/**
 	 * 將給定字符串的首字母轉為小寫
 	 *
-	 * @param str
-	 *            給定字符串
+	 * @param str 給定字符串
 	 * @return 新的字符串
 	 */
 	public static String firstLetterToLowerCase(String str) {
@@ -534,8 +508,7 @@ public class StringUtil {
 	/**
 	 * 將給定字符串的首字母轉為大寫
 	 *
-	 * @param str
-	 *            給定字符串
+	 * @param str 給定字符串
 	 * @return 新的字符串
 	 */
 	public static String firstLetterToUpperCase(String str) {
@@ -545,8 +518,7 @@ public class StringUtil {
 	/**
 	 * 將給定的字符串MD5加密
 	 *
-	 * @param string
-	 *            給定的字符串
+	 * @param string 給定的字符串
 	 * @return MD5加密後生成的字符串
 	 */
 	public static String MD5(String string) {
@@ -578,10 +550,8 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串是否以一個特定的字符串開頭，忽略大小寫
 	 *
-	 * @param sourceString
-	 *            給定的字符串
-	 * @param newString
-	 *            一個特定的字符串
+	 * @param sourceString 給定的字符串
+	 * @param newString    一個特定的字符串
 	 */
 	public static boolean startsWithIgnoreCase(String sourceString, String newString) {
 		int newLength = newString.length();
@@ -600,10 +570,8 @@ public class StringUtil {
 	/**
 	 * 判斷給定的字符串是否以一個特定的字符串結尾，忽略大小寫
 	 *
-	 * @param sourceString
-	 *            給定的字符串
-	 * @param newString
-	 *            一個特定的字符串
+	 * @param sourceString 給定的字符串
+	 * @param newString    一個特定的字符串
 	 */
 	public static boolean endsWithIgnoreCase(String sourceString, String newString) {
 		int newLength = newString.length();
@@ -676,6 +644,104 @@ public class StringUtil {
 			e.printStackTrace();
 		}
 		return textStr;// 返回文本字符串
+	}
+
+	/**
+	 * 去掉字符串中的標點符號、空格和數字
+	 *
+	 * @param input
+	 * @return
+	 */
+	public static String removePunctuation(String input) {
+		return input.replaceAll(" +", "").replaceAll("[\\pP\\p{Punct}]", "").replaceAll("\\d+", "");
+	}
+
+	/**
+	 * 判斷字符串是否為簡體中文
+	 *
+	 * @param input
+	 * @return
+	 */
+	public static boolean isSimpleChinese(String input) {
+		return input.matches("^[\u4e00-\u9fa5]+$");
+	}
+
+	/**
+	 * 判斷字符串是否含日文
+	 *
+	 * @param input
+	 * @return
+	 */
+	public static boolean isJapanese(String input) {
+		try {
+			return input.getBytes("shift-jis").length >= (2 * input.length());
+		} catch (UnsupportedEncodingException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * 判斷字符串是否含日文
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static boolean isJapanese1(String input) {
+		boolean status = false;
+		try {
+			for (char c : input.toCharArray()) {
+				if (japaneseUnicodeBlocks.contains(UnicodeBlock.of(c))) {
+					status = true;
+					break;
+				} else {
+					status = false;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = false;
+		}
+		return status;
+	}
+
+	/**
+	 * 將字符串轉字碼點
+	 *
+	 * @param input
+	 * @return
+	 */
+	public static String stringToUnicode(String input) throws UnsupportedEncodingException {
+		StringBuffer out = new StringBuffer();
+		byte[] bytes = input.getBytes("unicode");
+
+		// 將其byte轉換成對應的16進制表示
+		for (int i = 0; i < bytes.length - 1; i += 2) {
+			out.append("\\u");
+			String str = Integer.toHexString(bytes[i + 1] & 0xff);
+			for (int j = str.length(); j < 2; j++) {
+				out.append("0");
+			}
+			String str1 = Integer.toHexString(bytes[i] & 0xff);
+			out.append(str1);
+			out.append(str);
+		}
+		return out.toString();
+	}
+
+	/**
+	 * 字碼點轉字符串
+	 *
+	 * @param unicode
+	 * @return
+	 */
+	public static String unicodeToString(String unicode) {
+		StringBuffer sb = new StringBuffer();
+		String[] hex = unicode.split("\\\\u");
+		for (int i = 1; i < hex.length; i++) {
+			int index = Integer.parseInt(hex[i], 16);
+			sb.append((char) index);
+		}
+		return sb.toString();
 	}
 
 }

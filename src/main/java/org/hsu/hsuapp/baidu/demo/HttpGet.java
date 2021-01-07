@@ -1,4 +1,4 @@
-package org.hsu.hsuapp.util.baidu.demo;
+package org.hsu.hsuapp.baidu.demo;
 
 import java.io.BufferedReader;
 import java.io.Closeable;

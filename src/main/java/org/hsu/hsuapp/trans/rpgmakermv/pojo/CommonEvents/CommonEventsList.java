@@ -1,5 +1,5 @@
 
-package org.hsu.hsuapp.util.rpgmakermv.pojo.CommonEvents;
+package org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents;
 
 import java.util.HashMap;
 import java.util.Map;

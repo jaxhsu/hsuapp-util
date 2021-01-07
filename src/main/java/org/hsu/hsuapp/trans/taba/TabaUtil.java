@@ -1,4 +1,4 @@
-package org.hsu.hsuapp.util.taba;
+package org.hsu.hsuapp.trans.taba;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,13 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.hsu.hsuapp.baidu.BaiduTransApi;
+import org.hsu.hsuapp.baidu.TransJsonResult;
+import org.hsu.hsuapp.trans.AutoGenTrans;
 import org.hsu.hsuapp.util.FileUtil;
 import org.hsu.hsuapp.util.HttpRequester;
 import org.hsu.hsuapp.util.JacksonUtil;
 import org.hsu.hsuapp.util.MapUtil;
 import org.hsu.hsuapp.util.StringUtil;
-import org.hsu.hsuapp.util.baidu.BaiduTransApi;
-import org.hsu.hsuapp.util.baidu.TransJsonResult;
 
 public class TabaUtil {
 	
@@ -126,7 +127,7 @@ public class TabaUtil {
 		String from = "jp";
 		String to = "cht";
 		
-		HttpRequester request = new HttpRequester();		
+		//HttpRequester request = new HttpRequester();		
 		BaiduTransApi BaiduTransApi = new BaiduTransApi(appid, securityKey);		
 		
 		String hr = "";

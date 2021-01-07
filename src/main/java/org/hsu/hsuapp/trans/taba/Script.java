@@ -1,5 +1,5 @@
 
-package org.hsu.hsuapp.util.taba;
+package org.hsu.hsuapp.trans.taba;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

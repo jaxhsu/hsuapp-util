@@ -1,9 +1,9 @@
-package org.hsu.hsuapp.util.baidu.demo;
+package org.hsu.hsuapp.baidu.demo;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hsu.hsuapp.util.baidu.MD5;
+import org.hsu.hsuapp.baidu.MD5;
 
 public class TransApi {
     private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";

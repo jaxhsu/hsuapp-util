@@ -1,5 +1,5 @@
 
-package org.hsu.hsuapp.util.rpgmakermv.pojo.CommonEvents;
+package org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class CommonEventsRoot {
     @JsonProperty("id")
     private Integer id;
     @JsonProperty("list")
-    private java.util.List<org.hsu.hsuapp.util.rpgmakermv.pojo.CommonEvents.CommonEventsList> list = null;
+    private java.util.List<org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents.CommonEventsList> list = null;
     @JsonProperty("name")
     private String name;
     @JsonProperty("switchId")
@@ -44,12 +44,12 @@ public class CommonEventsRoot {
     }
 
     @JsonProperty("list")
-    public java.util.List<org.hsu.hsuapp.util.rpgmakermv.pojo.CommonEvents.CommonEventsList> getList() {
+    public java.util.List<org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents.CommonEventsList> getList() {
         return list;
     }
 
     @JsonProperty("list")
-    public void setList(java.util.List<org.hsu.hsuapp.util.rpgmakermv.pojo.CommonEvents.CommonEventsList> list) {
+    public void setList(java.util.List<org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents.CommonEventsList> list) {
         this.list = list;
     }
 
