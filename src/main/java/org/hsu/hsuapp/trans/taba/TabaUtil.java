@@ -17,26 +17,26 @@ import org.hsu.hsuapp.util.MapUtil;
 import org.hsu.hsuapp.util.StringUtil;
 
 public class TabaUtil {
-	
+
 	private static String GAME_PATH = "D:\\taba";
 	private static String SCRIPT_FILE_NAME = "test.js";
 	private static String OUTPUT_FILE_NAME = "_out.txt";
-	
+
 	private static String[] REMOVE_CHAR = new String[] { "#", "　", " ", "=" };
-	
+
 	private static AutoGenTrans autoGenTrans;
-	
+
 	/**
 	 * 顯示 cxx 內容
 	 * 
 	 * @param dataList
 	 */
-	public static void show_cxx_data(List<Map<String,Object>> dataList) {
+	public static void show_cxx_data(List<Map<String, Object>> dataList) {
 		for (int idx = 0; idx < dataList.size(); idx++) {
 			show_cxx_data(dataList.get(idx));
-		}		
+		}
 	}
-	
+
 	/**
 	 * 顯示 cxx 內容
 	 * 
@@ -69,7 +69,7 @@ public class TabaUtil {
 		if ("TXT".equals(type)) {
 			System.out.println("type=" + type);
 			System.out.println("name=" + name);
-			
+
 			String t = remove_char(text);
 			System.out.println("text=" + t);
 			if (!StringUtil.isBlank(t)) {
@@ -77,10 +77,10 @@ public class TabaUtil {
 				dataMap.put("text", t);
 			}
 			System.out.println("text trans=" + t);
-			
+
 		}
 	}
-	
+
 	/**
 	 * 翻譯內容
 	 * 
@@ -103,13 +103,13 @@ public class TabaUtil {
 		if (needUpdateTmpData) {
 			autoGenTrans.write(q, trans_tmp);
 		}
-		
+
 		if (StringUtil.isBlank(trans_tmp)) {
 			trans = "";
 		} else {
 			trans = trans_tmp;
 		}
-		
+
 		return trans;
 	}
 
@@ -126,35 +126,36 @@ public class TabaUtil {
 		String securityKey = "PZtwy_mAh5WdXfsDC_J8";
 		String from = "jp";
 		String to = "cht";
-		
-		//HttpRequester request = new HttpRequester();		
-		BaiduTransApi BaiduTransApi = new BaiduTransApi(appid, securityKey);		
-		
+
+		// HttpRequester request = new HttpRequester();
+		BaiduTransApi BaiduTransApi = new BaiduTransApi(appid, securityKey);
+
 		String hr = "";
 		try {
 			System.out.println("百度翻譯中...");
-			hr = BaiduTransApi.getTransResult(q, from, to);
+			Map dataMap = BaiduTransApi.getTransResult(q, from, to);
+			hr = MapUtil.getString(dataMap, HttpRequester.HTTP_RESPONSE_DATA);
 			Thread.sleep(2000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		TransJsonResult transJsonResult = JacksonUtil.getEntity(hr, TransJsonResult.class);
 		if (StringUtil.isBlank(transJsonResult.getErrorCode())) {
 			q_trans = transJsonResult.getTransResult().get(0).getDst();
-			if(!StringUtil.isBlank(q_trans)) {
+			if (!StringUtil.isBlank(q_trans)) {
 				System.out.println("翻譯成功...");
-			}else {
+			} else {
 				System.out.println("翻譯失敗..." + transJsonResult);
 				q_trans = "";
 			}
 		} else {
 			System.out.println("翻譯失敗..." + transJsonResult.getErrorCode());
 		}
-		
+
 		return q_trans;
 	}
-	
+
 	/**
 	 * 移除影響翻譯的字符
 	 * 
@@ -167,36 +168,33 @@ public class TabaUtil {
 		}
 		return str;
 	}
-	
+
 	public static void main(String[] args) {
-		
+
 		String charsetName = "UTF-8";
 		File f = new File(GAME_PATH, SCRIPT_FILE_NAME);
 		autoGenTrans = new AutoGenTrans(GAME_PATH);
 		autoGenTrans.load();
-		
+
 		StringBuilder sb = FileUtil.readFile(f.getAbsolutePath(), charsetName);
-		
+
 		Map<String, Object> dataMap = JacksonUtil.jsonToMap(sb.toString());
-		List<Object> list = dataMap.get("data") != null ? (List) dataMap.get("data")
-				: new LinkedList<Object>();
+		List<Object> list = dataMap.get("data") != null ? (List) dataMap.get("data") : new LinkedList<Object>();
 		System.out.println("list.size()=" + list.size());
-		
+
 		for (int idx = 0; idx < list.size(); idx++) {
 			Object obj = list.get(idx);
 			if (obj instanceof Map) {
 				show_cxx_data((Map) obj);
-			}
-			else if (obj instanceof List) {
+			} else if (obj instanceof List) {
 				show_cxx_data((List) obj);
-			} 
-			else {
+			} else {
 				System.out.println("不是map or list , idx=" + idx);
 			}
 		}
-		
+
 		// 寫檔
 		File of = new File(GAME_PATH, OUTPUT_FILE_NAME);
 		FileUtil.writeFile(of.getAbsolutePath(), JacksonUtil.getJson(list));
-	}	
+	}
 }

@@ -11,20 +11,42 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import org.apache.http.HttpStatus;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * HTTP請求對象
  * 
  * @author YYmmiinngg
  */
+@Slf4j
 public class HttpRequester {
-	
+
 	private String defaultContentEncoding;
 	private String user;
 	private String password;
-	
-	
+
+	// Constant Key
+	public static String HTTP_RESPONSE_CODE = "HttpResponseCode";
+	public static String HTTP_RESPONSE_DATA = "HttpResponseData";
+
 	public HttpRequester() {
 		this.defaultContentEncoding = Charset.defaultCharset().name();
+	}
+
+	/**
+	 * 取得response data
+	 * 
+	 * @param code
+	 * @param content
+	 * @return
+	 */
+	public Map<String, Object> getResponseMap(int code, String content) {
+		Map<String, Object> rtnMap = new HashMap<String, Object>();
+		rtnMap.put(HTTP_RESPONSE_CODE, code);
+		rtnMap.put(HTTP_RESPONSE_DATA, content);
+		return rtnMap;
 	}
 
 	/**
@@ -34,7 +56,7 @@ public class HttpRequester {
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendGet(String urlString) throws IOException {
+	public Map<String, Object> sendGet(String urlString) throws IOException {
 		return this.send(urlString, "GET", null, null);
 	}
 
@@ -42,11 +64,11 @@ public class HttpRequester {
 	 * 發送GET請求
 	 * 
 	 * @param urlString URL地址
-	 * @param params 參數集合
+	 * @param params    參數集合
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendGet(String urlString, Map<String, String> params) throws IOException {
+	public Map<String, Object> sendGet(String urlString, Map<String, String> params) throws IOException {
 		return this.send(urlString, "GET", params, null);
 	}
 
@@ -54,12 +76,12 @@ public class HttpRequester {
 	 * 發送GET請求
 	 * 
 	 * @param urlString URL地址
-	 * @param params 參數集合
+	 * @param params    參數集合
 	 * @param propertys 請求屬性
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendGet(String urlString, Map<String, String> params, Map<String, String> propertys)
+	public Map<String, Object> sendGet(String urlString, Map<String, String> params, Map<String, String> propertys)
 			throws IOException {
 		return this.send(urlString, "GET", params, propertys);
 	}
@@ -71,7 +93,7 @@ public class HttpRequester {
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendPost(String urlString) throws IOException {
+	public Map<String, Object> sendPost(String urlString) throws IOException {
 		return this.send(urlString, "POST", null, null);
 	}
 
@@ -79,11 +101,11 @@ public class HttpRequester {
 	 * 發送POST請求
 	 * 
 	 * @param urlString URL地址
-	 * @param params 參數集合
+	 * @param params    參數集合
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendPost(String urlString, Map<String, String> params) throws IOException {
+	public Map<String, Object> sendPost(String urlString, Map<String, String> params) throws IOException {
 		return this.send(urlString, "POST", params, null);
 	}
 
@@ -91,12 +113,13 @@ public class HttpRequester {
 	 * 發送POST請求
 	 * 
 	 * @param urlString URL地址
-	 * @param params 參數集合
-	 * @param charset 編碼
+	 * @param params    參數集合
+	 * @param charset   編碼
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendPost(String urlString, Map<String, String> params, String charset) throws IOException {
+	public Map<String, Object> sendPost(String urlString, Map<String, String> params, String charset)
+			throws IOException {
 		return this.send(urlString, "POST", params, null, charset);
 	}
 
@@ -104,12 +127,12 @@ public class HttpRequester {
 	 * 發送POST請求
 	 * 
 	 * @param urlString URL地址
-	 * @param params 參數集合
+	 * @param params    參數集合
 	 * @param propertys 請求屬性
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	public String sendPost(String urlString, Map<String, String> params, Map<String, String> propertys)
+	public Map<String, Object> sendPost(String urlString, Map<String, String> params, Map<String, String> propertys)
 			throws IOException {
 		return this.send(urlString, "POST", params, propertys);
 	}
@@ -117,15 +140,15 @@ public class HttpRequester {
 	/**
 	 * 發送POST請求
 	 * 
-	 * @param urlString URL地址
-	 * @param method 請求方式
+	 * @param urlString  URL地址
+	 * @param method     請求方式
 	 * @param parameters 參數集合
-	 * @param propertys 請求屬性
+	 * @param propertys  請求屬性
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	private String send(String urlString, String method, Map<String, String> parameters, Map<String, String> propertys)
-			throws IOException {
+	private Map<String, Object> send(String urlString, String method, Map<String, String> parameters,
+			Map<String, String> propertys) throws IOException {
 		return this.send(urlString, method, parameters, propertys, "UTF-8");
 	}
 
@@ -136,11 +159,11 @@ public class HttpRequester {
 	 * @return 響映對象
 	 * @throws IOException
 	 */
-	private String send(String urlString, String method, Map<String, String> parameters, Map<String, String> propertys,
-			String charset) throws IOException {
-		if (urlString != null && !"".equals(urlString)) {
-			HttpURLConnection urlConnection = null;
+	private Map<String, Object> send(String urlString, String method, Map<String, String> parameters,
+			Map<String, String> propertys, String charset) {
 
+		HttpURLConnection urlConnection = null;
+		try {
 			if (method.equalsIgnoreCase("GET") && parameters != null) {
 				StringBuffer param = new StringBuffer();
 				int i = 0;
@@ -162,14 +185,14 @@ public class HttpRequester {
 			urlConnection.setDoInput(true);
 			urlConnection.setUseCaches(false);
 			urlConnection.addRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=" + charset);
-			
+
 			if (user != null & password != null) {
 				byte[] message = (user + ":" + password).getBytes("UTF-8");
 				String encoded = javax.xml.bind.DatatypeConverter.printBase64Binary(message);
-				urlConnection.setRequestProperty("Authorization", "Basic "+encoded);
+				urlConnection.setRequestProperty("Authorization", "Basic " + encoded);
 				clearUser();
 			}
-			
+
 			if (propertys != null)
 				for (String key : propertys.keySet()) {
 					urlConnection.addRequestProperty(key, propertys.get(key));
@@ -187,8 +210,9 @@ public class HttpRequester {
 			}
 
 			return this.makeContent(urlConnection);
-		} else {
-			return "URL is empty";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return getResponseMap(HttpStatus.SC_INTERNAL_SERVER_ERROR, "");
 		}
 	}
 
@@ -201,7 +225,7 @@ public class HttpRequester {
 		this.user = user;
 		this.password = password;
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -209,7 +233,7 @@ public class HttpRequester {
 		this.user = null;
 		this.password = null;
 	}
-	
+
 	/**
 	 * 發送HTTP請求
 	 * 
@@ -217,11 +241,11 @@ public class HttpRequester {
 	 * @return 響映對象
 	 * @throws IOException
 	 */
-	public String sendAppJson(String urlString, String strJson, String charset) throws IOException {
-		
-		if (urlString != null && !"".equals(urlString)) {
-			HttpURLConnection urlConnection = null;
+	public Map<String, Object> sendAppJson(String urlString, String strJson, String charset) {
 
+		HttpURLConnection urlConnection = null;
+
+		try {
 			URL url = new URL(urlString);
 			urlConnection = (HttpURLConnection) url.openConnection();
 
@@ -236,13 +260,15 @@ public class HttpRequester {
 			urlConnection.getOutputStream().write(sbParam.toString().getBytes("UTF-8"));
 			urlConnection.getOutputStream().flush();
 			urlConnection.getOutputStream().close();
-			
+
 			return this.makeContent(urlConnection);
-		} else {
-			return "URL is empty";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return getResponseMap(HttpStatus.SC_INTERNAL_SERVER_ERROR, "");
 		}
-	}	
-	
+
+	}
+
 	/**
 	 * 得到回應物件
 	 * 
@@ -250,17 +276,17 @@ public class HttpRequester {
 	 * @return 響應物件
 	 * @throws IOException
 	 */
-	private String makeContent(HttpURLConnection urlConnection) throws IOException {
+	private Map<String, Object> makeContent(HttpURLConnection urlConnection) throws IOException {
+
+		int code = HttpStatus.SC_OK;
 		String content = "";
-		
 		try {
-			String code = String.valueOf(urlConnection.getResponseCode());
-			
-			if ("200".equals(code)) {
+			code = urlConnection.getResponseCode();
+			if (HttpStatus.SC_OK == code) {
 				InputStream in = urlConnection.getInputStream();
 				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
 				Vector<String> contentCollection = new Vector<String>();
-				
+
 				StringBuffer temp = new StringBuffer();
 				String line = bufferedReader.readLine();
 				while (line != null) {
@@ -273,19 +299,17 @@ public class HttpRequester {
 				String ecod = urlConnection.getContentEncoding();
 				if (ecod == null)
 					ecod = this.defaultContentEncoding;
-				
-				content = new String(temp.toString().getBytes(), ecod);				
-			} else {
-				content = code;
+
+				content = new String(temp.toString().getBytes(), ecod);
 			}
-			
-			return content;
 		} catch (IOException e) {
 			throw e;
 		} finally {
 			if (urlConnection != null)
 				urlConnection.disconnect();
 		}
+
+		return getResponseMap(code, content);
 	}
 
 	/**
@@ -310,8 +334,11 @@ public class HttpRequester {
 //			params.put("owner", "TESTPORTAL003");
 			HttpRequester request = new HttpRequester();
 			// request.defaultContentEncoding = "UTF-8";
-			//String hr = request.sendGet("http://203.64.154.30/AdminPortal/addTodolist", params);
-			String hr = request.sendGet("http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4", params);
+			// String hr = request.sendGet("http://203.64.154.30/AdminPortal/addTodolist",
+			// params);
+			Map<String, Object> hr = request.sendGet(
+					"http://api.fanyi.baidu.com/api/trans/vip/translate?q=apple&from=en&to=zh&appid=2015063000000001&salt=1435660288&sign=f89f9594663708c1605f3d736d01d2d4",
+					params);
 			System.out.println("============: " + hr);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -3,6 +3,7 @@ package org.hsu.hsuapp.trans.rpgmakermv;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.hsu.hsuapp.baidu.BaiduTransApi;
@@ -13,6 +14,7 @@ import org.hsu.hsuapp.trans.rpgmakermv.pojo.CommonEvents.CommonEventsRoot;
 import org.hsu.hsuapp.util.FileUtil;
 import org.hsu.hsuapp.util.HttpRequester;
 import org.hsu.hsuapp.util.JacksonUtil;
+import org.hsu.hsuapp.util.MapUtil;
 import org.hsu.hsuapp.util.StringUtil;
 
 public class RmmvUtil {
@@ -110,7 +112,8 @@ public class RmmvUtil {
 		String hr = "";
 		try {
 			System.out.println("百度翻譯中...q=" + q);
-			hr = BaiduTransApi.getTransResult(q, from, to);
+			Map<String,Object> dataMap = BaiduTransApi.getTransResult(q, from, to);
+			hr = MapUtil.getString(dataMap, HttpRequester.HTTP_RESPONSE_DATA);
 			Thread.sleep(1000);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.hsu.hsuapp.util.HttpRequester;
 import org.junit.Before;
-import org.junit.Test;
 
 public class HttpRequesterTest {
 
@@ -20,22 +19,22 @@ public class HttpRequesterTest {
 		httpRequester = new HttpRequester();
 	}
 
-	@Test
+	// @Test
 	public void test() {
 		try {
 			Map<String, String> params = new HashMap<String, String>();
-			params.put("s", "2"); //每頁筆數
-			params.put("p", "1"); //頁數
-			
+			params.put("s", "2"); // 每頁筆數
+			params.put("p", "1"); // 頁數
+
 			String user = "jack";
 			String password = "1234";
 
 			HttpRequester request = new HttpRequester();
 			request.setUser(user, password);
-			
-			String hr = request.sendGet(REST_QUERYTASK_URL, params);
+
+			Map hr = request.sendGet(REST_QUERYTASK_URL, params);
 			System.out.println(hr);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
