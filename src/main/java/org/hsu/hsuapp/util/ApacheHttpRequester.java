@@ -1,6 +1,11 @@
 package org.hsu.hsuapp.util;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +23,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -33,15 +41,15 @@ public class ApacheHttpRequester {
 
 	protected static Logger logger = Logger.getLogger(ApacheHttpRequester.class);
 	// 請求超時時間,這個時間定義了socket讀數據的超時時間，也就是連接到服務器之後到從服務器獲取響應數據需要等待的時間,發生超時，會拋出SocketTimeoutException異常。
-	private static final int SOCKET_TIME_OUT = 60000;
+	public static int socket_time_out = 60000;
 	// 連接超時時間,這個時間定義了通過網絡與服務器建立連接的超時時間，也就是取得了連接池中的某個連接之後到接通目標url的連接等待時間。發生超時，會拋出ConnectionTimeoutException異常
-	private static final int CONNECT_TIME_OUT = 60000;
+	public static int connect_time_out = 60000;
 
 	private HttpClientBuilder httpClientBuilder;
 	private CloseableHttpClient closeableHttpClient;
 
-	private String user = "";
-	private String password = "";
+	private String user = null;
+	private String password = null;
 
 	public ApacheHttpRequester() {
 		super();
@@ -52,6 +60,14 @@ public class ApacheHttpRequester {
 		this.user = user;
 		this.password = password;
 	}
+	
+	public static void setSocket_time_out(int socket_time_out) {
+		ApacheHttpRequester.socket_time_out = socket_time_out;
+	}
+
+	public static void setConnect_time_out(int connect_time_out) {
+		ApacheHttpRequester.connect_time_out = connect_time_out;
+	}
 
 	/**
 	 * 
@@ -60,10 +76,23 @@ public class ApacheHttpRequester {
 	 * @param params
 	 * @return
 	 */
-	public Map<ApacheHttpRequester.HttpResponseEnum, String> sendGET(String url, Map<String, Object> headers,
+	public Map<ApacheHttpRequester.HttpResponseEnum, Object> sendGET(String url, Map<String, Object> headers,
 			Map<String, Object> params) {
+		return sendGET(url, headers, params, null);
+	}
+	
+	/**
+	 * 
+	 * @param url
+	 * @param headers
+	 * @param params
+	 * @param downloadFilePath　指定下載檔案位置
+	 * @return
+	 */
+	public Map<ApacheHttpRequester.HttpResponseEnum, Object> sendGET(String url, Map<String, Object> headers,
+			Map<String, Object> params, String downloadFilePath) {
 
-		Map<ApacheHttpRequester.HttpResponseEnum, String> resultMap = new HashMap<ApacheHttpRequester.HttpResponseEnum, String>();
+		Map<ApacheHttpRequester.HttpResponseEnum, Object> resultMap = new HashMap<ApacheHttpRequester.HttpResponseEnum, Object>();
 		CloseableHttpResponse response = null;
 		HttpEntity entity = null;
 
@@ -77,12 +106,12 @@ public class ApacheHttpRequester {
 
 			HttpGet req = new HttpGet(url);
 
-			// setConfig,添加配置,如設置請求超時時間,連接超時時間
-			RequestConfig reqConfig = RequestConfig.custom().setSocketTimeout(SOCKET_TIME_OUT)
-					.setConnectTimeout(CONNECT_TIME_OUT).build();
+			// setConfig：添加配置,如設置請求超時時間,連接超時時間
+			RequestConfig reqConfig = RequestConfig.custom().setSocketTimeout(socket_time_out)
+					.setConnectTimeout(connect_time_out).build();
 			req.setConfig(reqConfig);
 
-			// setHeader,添加頭文件
+			// setHeader：添加頭文件
 			Set<String> keys = headers.keySet();
 			for (String key : keys) {
 				req.setHeader(key, headers.get(key).toString());
@@ -105,11 +134,69 @@ public class ApacheHttpRequester {
 
 			response = closeableHttpClient.execute(req);
 			entity = response.getEntity();
-			String result = EntityUtils.toString(entity, "UTF-8");
+			String result = "";
+			
+			if (entity != null) {
+				String contentTypeName = entity.getContentType().getName();
+				String contentTypeValue = entity.getContentType().getValue();
+				logger.debug("contentType name=" + contentTypeName);
+				logger.debug("contentType value=" + contentTypeValue);
+				
+				// #### 取得下載檔案
+				if (contentTypeValue.contains("application/xml") || contentTypeValue.contains("application/pdf")) {
+					File downloadFile = new File(downloadFilePath);
+					if (downloadFile.exists()) {
+						downloadFile.delete();
+					}
+					if (!downloadFile.getParentFile().exists()) {
+						downloadFile.getParentFile().mkdirs();
+					}
+					
+					InputStream in = new BufferedInputStream(entity.getContent());
+					ByteArrayOutputStream out = null;
+					FileOutputStream fos = null;
+					try {
+						out = new ByteArrayOutputStream();
+						byte[] buf = new byte[4096];
+						int n = 0;
 
+						while (-1 != (n = in.read(buf))) {
+							out.write(buf, 0, n);
+						}
+						byte[] resbyte = out.toByteArray();
+
+						fos = new FileOutputStream(downloadFile);
+						fos.write(resbyte);
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new Exception(e.getMessage());
+					} finally {
+						try {
+							if (in != null) {
+								in.close();
+							}
+							if (out != null) {
+								out.close();
+							}
+							if (fos != null) {
+								fos.close();
+							}
+						} catch (Exception e) {
+						}
+					}
+				} else {
+					// #### 預設處理
+					result = EntityUtils.toString(entity, "UTF-8");
+				}
+
+			} else {
+				logger.debug("response getEntity is null!");
+			}
+			
 			// 回傳結果
 			resultMap.put(HttpResponseEnum.STATUS_CODE, String.valueOf(response.getStatusLine().getStatusCode()));
 			resultMap.put(HttpResponseEnum.ENTITY_CONTENT, result);
+			
 		} catch (Exception e) {
 			logger.error("sendGET error ", e);
 			e.printStackTrace();
@@ -128,8 +215,27 @@ public class ApacheHttpRequester {
 		return resultMap;
 	}
 
+	/**
+	 * 
+	 * @param url
+	 * @param headers
+	 * @param param
+	 * @return
+	 */
 	public Map<ApacheHttpRequester.HttpResponseEnum, String> sendPOST(String url, Map<String, Object> headers,
 			Map<String, Object> param) {
+		return sendPOST(url, headers, param, null);
+	}
+	/**
+	 * 
+	 * @param url
+	 * @param headers
+	 * @param param
+	 * @param uploadFile 指定上傳附件
+	 * @return
+	 */
+	public Map<ApacheHttpRequester.HttpResponseEnum, String> sendPOST(String url, Map<String, Object> headers,
+			Map<String, Object> param, File uploadFile) {
 
 		// 目前HttpClient最新版的實現類為CloseableHttpClient
 		// CloseableHttpClient client = HttpClients.createDefault();
@@ -147,36 +253,52 @@ public class ApacheHttpRequester {
 			// 建立Request的對象，一般用目標url來構造，Request一般配置addHeader、setEntity、setConfig
 			HttpPost req = new HttpPost(url);
 
-			// setConfig,添加配置,如設置請求超時時間,連接超時時間
-			RequestConfig reqConfig = RequestConfig.custom().setSocketTimeout(SOCKET_TIME_OUT)
-					.setConnectTimeout(CONNECT_TIME_OUT).build();
+			// setConfig：添加配置,如設置請求超時時間,連接超時時間
+			RequestConfig reqConfig = RequestConfig.custom().setSocketTimeout(socket_time_out)
+					.setConnectTimeout(connect_time_out).build();
 			req.setConfig(reqConfig);
 
-			// setHeader,添加頭文件
+			// setHeader：添加頭文件
 			Set<String> keys = headers.keySet();
 			for (String key : keys) {
 				req.setHeader(key, headers.get(key).toString());
 			}
 
-			// setEntity,添加內容
+			// setEntity：添加內容
 			if (param != null) {
-				entity = new UrlEncodedFormEntity(createParam(param), Consts.UTF_8);
+				if (uploadFile != null) {
+					// 不附加上傳檔案
+					entity = new UrlEncodedFormEntity(createParam(param), Consts.UTF_8);
+				} else {
+					// 附加上傳檔案
+					entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+							.addBinaryBody("zippedSource", uploadFile, ContentType.DEFAULT_BINARY, uploadFile.getName())
+							.addTextBody("message", "upload zippedSource", ContentType.DEFAULT_BINARY).build();
+				}
+				req.setEntity(entity);
 			}
-			req.setEntity(entity);
 
 			// 執行Request請求,CloseableHttpClient的execute方法返回的response都是CloseableHttpResponse類型
 			// 其常用方法有getFirstHeader(String)、getLastHeader(String)、headerIterator（String）取得某個Header
 			// name對應的叠代器、getAllHeaders()、getEntity、getStatus等
 			response = closeableHttpClient.execute(req);
 			entity = response.getEntity();
-
-			// 用EntityUtils.toString()這個靜態方法將HttpEntity轉換成字符串,防止服務器返回的數據帶有中文,所以在轉換的時候將字符集指定成utf-8就可以了
-			String result = EntityUtils.toString(entity, "UTF-8");
-
+			
+			String result = "";
+			if (entity != null) {
+				String contentTypeName = entity.getContentType().getName();
+				String contentTypeValue = entity.getContentType().getValue();
+				logger.debug("contentType name=" + contentTypeName);
+				logger.debug("contentType value=" + contentTypeValue);
+				// 用EntityUtils.toString()這個靜態方法將HttpEntity轉換成字符串,防止服務器返回的數據帶有中文,所以在轉換的時候將字符集指定成utf-8就可以了
+				result = EntityUtils.toString(entity, "UTF-8");
+			} else {
+				logger.debug("response getEntity is null!");
+			}
+			
 			// 回傳結果
 			resultMap.put(HttpResponseEnum.STATUS_CODE, String.valueOf(response.getStatusLine().getStatusCode()));
 			resultMap.put(HttpResponseEnum.ENTITY_CONTENT, result);
-
 		} catch (Exception e) {
 			logger.error("sendPOST error ", e);
 			e.printStackTrace();

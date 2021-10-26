@@ -26,9 +26,9 @@ public class ApacheHttpResuesterTest {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("status", "Reserved");
 
-		Map<HttpResponseEnum, String> rtnMap = apacheHttpResuester.sendGET(url, null, params);
-		String status_code = rtnMap.get(HttpResponseEnum.STATUS_CODE);
-		String entity_content = rtnMap.get(HttpResponseEnum.ENTITY_CONTENT);
+		Map<HttpResponseEnum, Object> rtnMap = apacheHttpResuester.sendGET(url, null, params);
+		Object status_code = rtnMap.get(HttpResponseEnum.STATUS_CODE);
+		Object entity_content = rtnMap.get(HttpResponseEnum.ENTITY_CONTENT);
 
 		System.out.println(status_code);
 		System.out.println(entity_content);
