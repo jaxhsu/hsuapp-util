@@ -11,8 +11,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class FileUtil {
 	
@@ -24,6 +26,35 @@ public class FileUtil {
 		
 	}
 
+	/**
+	 * 列出指定目錄下的檔案
+	 * 
+	 * @param sendFiles		存放檔案資料
+	 * @param baseFolder	根目錄(預設為BASE)
+	 * @param srcFolder		相對目錄(不為null時，以此目錄為PATH開頭)
+	 * @param srcPattern	符合條件檔名(正則表示式)
+	 */
+	public static void findFiles(List<Map<String, String>> sendFiles, String baseFolder, String srcFolder,
+			String srcPattern) {
+		File srcDir = srcFolder == null ? new File(baseFolder) : new File(baseFolder, srcFolder);
+		if (srcDir.exists() && srcDir.isDirectory()) {
+			File[] fileList = srcDir.listFiles();
+			for (File file : fileList) {
+				if (srcPattern == null || file.getName().matches(srcPattern)) {
+					String filePath = (srcFolder == null ? "" : srcFolder + "/") + file.getName();
+					if (file.isDirectory()) {
+						findFiles(sendFiles, baseFolder, filePath, null); // 全部
+					} else {
+						Map<String, String> fMap = new HashMap<String, String>();
+						fMap.put("BASE", baseFolder);
+						fMap.put("PATH", filePath);
+						sendFiles.add(fMap);
+					}
+				}
+			} // end of for
+		} // end of if
+	}
+	
 	/**
 	 * read file
 	 *
