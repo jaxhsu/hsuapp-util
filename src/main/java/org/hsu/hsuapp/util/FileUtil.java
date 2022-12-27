@@ -17,22 +17,22 @@ import java.util.List;
 import java.util.Map;
 
 public class FileUtil {
-	
+
 	public final static String FILE_EXTENSION_SEPARATOR = ".";
 	/** URI類型：file */
 	public static final String URI_TYPE_FILE = "file";
 
 	public FileUtil() {
-		
+
 	}
 
 	/**
 	 * 列出指定目錄下的檔案
 	 * 
-	 * @param sendFiles		存放檔案資料
-	 * @param baseFolder	根目錄(預設為BASE)
-	 * @param srcFolder		相對目錄(不為null時，以此目錄為PATH開頭)
-	 * @param srcPattern	符合條件檔名(正則表示式)
+	 * @param sendFiles  存放檔案資料
+	 * @param baseFolder 根目錄(預設為BASE)
+	 * @param srcFolder  相對目錄(不為null時，以此目錄為PATH開頭)
+	 * @param srcPattern 符合條件檔名(正則表示式)
 	 */
 	public static void findFiles(List<Map<String, String>> sendFiles, String baseFolder, String srcFolder,
 			String srcPattern) {
@@ -54,18 +54,15 @@ public class FileUtil {
 			} // end of for
 		} // end of if
 	}
-	
+
 	/**
 	 * read file
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param charsetName
-	 *            The name of a supported {@link java.nio.charset.Charset
-	 *            </code>charset<code>}
+	 * @param filePath    路徑
+	 * @param charsetName The name of a supported {@link java.nio.charset.Charset
+	 *                    </code>charset<code>}
 	 * @return if file not exist, return null, else return content of file
-	 * @throws RuntimeException
-	 *             if an error occurs while operator BufferedReader
+	 * @throws RuntimeException if an error occurs while operator BufferedReader
 	 */
 	public static StringBuilder readFile(String filePath, String charsetName) {
 
@@ -97,16 +94,12 @@ public class FileUtil {
 	/**
 	 * write file
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param content
-	 *            上下文
-	 * @param append
-	 *            is append, if true, write to the end of file, else clear
-	 *            content of file and write into it
+	 * @param filePath 路徑
+	 * @param content  上下文
+	 * @param append   is append, if true, write to the end of file, else clear
+	 *                 content of file and write into it
 	 * @return return false if content is empty, true otherwise
-	 * @throws RuntimeException
-	 *             if an error occurs while operator FileWriter
+	 * @throws RuntimeException if an error occurs while operator FileWriter
 	 */
 	public static boolean writeFile(String filePath, String content, boolean append) {
 
@@ -130,16 +123,12 @@ public class FileUtil {
 	/**
 	 * write file
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param contentList
-	 *            集合
-	 * @param append
-	 *            is append, if true, write to the end of file, else clear
-	 *            content of file and write into it
+	 * @param filePath    路徑
+	 * @param contentList 集合
+	 * @param append      is append, if true, write to the end of file, else clear
+	 *                    content of file and write into it
 	 * @return return false if contentList is empty, true otherwise
-	 * @throws RuntimeException
-	 *             if an error occurs while operator FileWriter
+	 * @throws RuntimeException if an error occurs while operator FileWriter
 	 */
 	public static boolean writeFile(String filePath, List<String> contentList, boolean append) {
 
@@ -169,10 +158,8 @@ public class FileUtil {
 	/**
 	 * write file, the string will be written to the begin of the file
 	 * 
-	 * @param filePath
-	 *            地址
-	 * @param content
-	 *            上下文
+	 * @param filePath 地址
+	 * @param content  上下文
 	 * @return 是否寫入成功
 	 */
 	public static boolean writeFile(String filePath, String content) {
@@ -183,10 +170,8 @@ public class FileUtil {
 	/**
 	 * write file, the string list will be written to the begin of the file
 	 * 
-	 * @param filePath
-	 *            地址
-	 * @param contentList
-	 *            集合
+	 * @param filePath    地址
+	 * @param contentList 集合
 	 * @return 是否寫入成功
 	 */
 	public static boolean writeFile(String filePath, List<String> contentList) {
@@ -197,10 +182,8 @@ public class FileUtil {
 	/**
 	 * write file, the bytes will be written to the begin of the file
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param stream
-	 *            輸入流
+	 * @param filePath 路徑
+	 * @param stream   輸入流
 	 * @return 返回是否寫入成功
 	 */
 	public static boolean writeFile(String filePath, InputStream stream) {
@@ -211,13 +194,10 @@ public class FileUtil {
 	/**
 	 * write file
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param stream
-	 *            the input stream
-	 * @param append
-	 *            if <code>true</code>, then bytes will be written to the end of
-	 *            the file rather than the beginning
+	 * @param filePath 路徑
+	 * @param stream   the input stream
+	 * @param append   if <code>true</code>, then bytes will be written to the end
+	 *                 of the file rather than the beginning
 	 * @return return true FileOutputStream
 	 */
 	public static boolean writeFile(String filePath, InputStream stream, boolean append) {
@@ -228,10 +208,8 @@ public class FileUtil {
 	/**
 	 * write file, the bytes will be written to the begin of the file
 	 *
-	 * @param file
-	 *            文件對象
-	 * @param stream
-	 *            輸入流
+	 * @param file   文件對象
+	 * @param stream 輸入流
 	 * @return 返回是否寫入成功
 	 */
 	public static boolean writeFile(File file, InputStream stream) {
@@ -242,16 +220,12 @@ public class FileUtil {
 	/**
 	 * write file
 	 *
-	 * @param file
-	 *            the file to be opened for writing.
-	 * @param stream
-	 *            the input stream
-	 * @param append
-	 *            if <code>true</code>, then bytes will be written to the end of
-	 *            the file rather than the beginning
+	 * @param file   the file to be opened for writing.
+	 * @param stream the input stream
+	 * @param append if <code>true</code>, then bytes will be written to the end of
+	 *               the file rather than the beginning
 	 * @return return true
-	 * @throws RuntimeException
-	 *             if an error occurs while operator FileOutputStream
+	 * @throws RuntimeException if an error occurs while operator FileOutputStream
 	 */
 	public static boolean writeFile(File file, InputStream stream, boolean append) {
 		OutputStream o = null;
@@ -278,10 +252,8 @@ public class FileUtil {
 	/**
 	 * move file
 	 * 
-	 * @param sourceFilePath
-	 *            資源路徑
-	 * @param destFilePath
-	 *            刪除的路徑
+	 * @param sourceFilePath 資源路徑
+	 * @param destFilePath   刪除的路徑
 	 */
 	public static void moveFile(String sourceFilePath, String destFilePath) {
 
@@ -294,10 +266,8 @@ public class FileUtil {
 	/**
 	 * move file
 	 * 
-	 * @param srcFile
-	 *            文件對象
-	 * @param destFile
-	 *            對象
+	 * @param srcFile  文件對象
+	 * @param destFile 對象
 	 */
 	public static void moveFile(File srcFile, File destFile) {
 
@@ -311,12 +281,9 @@ public class FileUtil {
 	/**
 	 * copy file
 	 *
-	 * @param sourceFilePath
-	 *            資源路徑
-	 * @param destFilePath
-	 *            刪除的文件
-	 * @throws RuntimeException
-	 *             if an error occurs while operator FileOutputStream
+	 * @param sourceFilePath 資源路徑
+	 * @param destFilePath   刪除的文件
+	 * @throws RuntimeException if an error occurs while operator FileOutputStream
 	 * @return 返回是否成功
 	 */
 	public static boolean copyFile(String sourceFilePath, String destFilePath) {
@@ -333,14 +300,11 @@ public class FileUtil {
 	/**
 	 * read file to string list, a element of list is a line
 	 *
-	 * @param filePath
-	 *            路徑
-	 * @param charsetName
-	 *            The name of a supported {@link java.nio.charset.Charset
-	 *            </code>charset<code>}
+	 * @param filePath    路徑
+	 * @param charsetName The name of a supported {@link java.nio.charset.Charset
+	 *                    </code>charset<code>}
 	 * @return if file not exist, return null, else return content of file
-	 * @throws RuntimeException
-	 *             if an error occurs while operator BufferedReader
+	 * @throws RuntimeException if an error occurs while operator BufferedReader
 	 */
 	public static List<String> readFileToList(String filePath, String charsetName) {
 
@@ -368,8 +332,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param filePath
-	 *            文件的路徑
+	 * @param filePath 文件的路徑
 	 * @return 返回文件的信息
 	 */
 	public static String getFileNameWithoutExtension(String filePath) {
@@ -407,8 +370,7 @@ public class FileUtil {
 	 *      getFileName("/home/admin/a.txt/b.mp3")  =   "b.mp3"
 	 * </pre>
 	 *
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return file name from path, include suffix
 	 */
 	public static String getFileName(String filePath) {
@@ -440,8 +402,7 @@ public class FileUtil {
 	 *      getFolderName("/home/admin/a.txt/b.mp3")  =   "/home/admin/a.txt"
 	 * </pre>
 	 * 
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return file name from path, include suffix
 	 */
 	public static String getFolderName(String filePath) {
@@ -473,8 +434,7 @@ public class FileUtil {
 	 *      getFileExtension("/home/admin/a.txt/b.mp3")  =   "mp3"
 	 * </pre>
 	 * 
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return 信息
 	 */
 	public static String getFileExtension(String filePath) {
@@ -493,8 +453,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return 是否創建成功
 	 */
 	public static boolean makeDirs(String filePath) {
@@ -510,8 +469,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return 是否創建成功
 	 */
 	public static boolean makeFolders(String filePath) {
@@ -521,8 +479,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param filePath
-	 *            路徑
+	 * @param filePath 路徑
 	 * @return 是否存在這個文件
 	 */
 	public static boolean isFileExist(String filePath) {
@@ -537,8 +494,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param directoryPath
-	 *            路徑
+	 * @param directoryPath 路徑
 	 * @return 是否有文件夾
 	 */
 	public static boolean isFolderExist(String directoryPath) {
@@ -553,8 +509,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param path
-	 *            路徑
+	 * @param path 路徑
 	 * @return 是否刪除成功
 	 */
 	public static boolean deleteFile(String path) {
@@ -585,8 +540,7 @@ public class FileUtil {
 
 	/**
 	 *
-	 * @param path
-	 *            路徑
+	 * @param path 路徑
 	 * @return 返回文件大小
 	 */
 	public static long getFileSize(String path) {
@@ -602,10 +556,8 @@ public class FileUtil {
 	/**
 	 * 保存多媒體數據為文件.
 	 *
-	 * @param data
-	 *            多媒體數據
-	 * @param fileName
-	 *            保存文件名
+	 * @param data     多媒體數據
+	 * @param fileName 保存文件名
 	 * @return 保存成功或失敗
 	 */
 	public static boolean save2File(InputStream data, String fileName) {
@@ -637,8 +589,7 @@ public class FileUtil {
 	/**
 	 * 讀取文件的字節數組.
 	 *
-	 * @param file
-	 *            文件
+	 * @param file 文件
 	 * @return 字節數組
 	 */
 	public static byte[] readFile4Bytes(File file) {
@@ -672,8 +623,7 @@ public class FileUtil {
 	/**
 	 * 讀取文本文件內容，以行的形式讀取
 	 *
-	 * @param filePathAndName
-	 *            帶有完整絕對路徑的文件名
+	 * @param filePathAndName 帶有完整絕對路徑的文件名
 	 * @return String 返回文本文件的內容
 	 */
 	public static String readFileContent(String filePathAndName) {
@@ -688,14 +638,10 @@ public class FileUtil {
 	/**
 	 * 讀取文本文件內容，以行的形式讀取
 	 *
-	 * @param filePathAndName
-	 *            帶有完整絕對路徑的文件名
-	 * @param encoding
-	 *            文本文件打開的編碼方式 例如 GBK,UTF-8
-	 * @param sep
-	 *            分隔符 例如：#，默認為\n;
-	 * @param bufLen
-	 *            設置緩沖區大小
+	 * @param filePathAndName 帶有完整絕對路徑的文件名
+	 * @param encoding        文本文件打開的編碼方式 例如 GBK,UTF-8
+	 * @param sep             分隔符 例如：#，默認為\n;
+	 * @param bufLen          設置緩沖區大小
 	 * @return String 返回文本文件的內容
 	 */
 	public static String readFileContent(String filePathAndName, String encoding, String sep, int bufLen) {
@@ -743,10 +689,8 @@ public class FileUtil {
 	/**
 	 * 根據文件路徑，檢查文件是否不大於指定大小
 	 *
-	 * @param filepath
-	 *            文件路徑
-	 * @param maxSize
-	 *            最大
+	 * @param filepath 文件路徑
+	 * @param maxSize  最大
 	 * @return 是否
 	 */
 	public static boolean checkFileSize(String filepath, int maxSize) {
@@ -765,10 +709,8 @@ public class FileUtil {
 	/**
 	 * 將字符串以UTF-8編碼保存到文件中
 	 * 
-	 * @param str
-	 *            保存的字符串
-	 * @param fileName
-	 *            文件的名字
+	 * @param str      保存的字符串
+	 * @param fileName 文件的名字
 	 * @return 是否保存成功
 	 */
 	public static boolean saveStrToFile(String str, String fileName) {
@@ -779,12 +721,9 @@ public class FileUtil {
 	/**
 	 * 將字符串以charsetName編碼保存到文件中
 	 * 
-	 * @param str
-	 *            保存的字符串
-	 * @param fileName
-	 *            文件的名字
-	 * @param charsetName
-	 *            字符串編碼
+	 * @param str         保存的字符串
+	 * @param fileName    文件的名字
+	 * @param charsetName 字符串編碼
 	 * @return 是否保存成功
 	 */
 	public static boolean saveStrToFile(String str, String fileName, String charsetName) {
@@ -827,10 +766,8 @@ public class FileUtil {
 	/**
 	 * 文件重命名
 	 *
-	 * @param oldPath
-	 *            舊的文件名字
-	 * @param newPath
-	 *            新的文件名字
+	 * @param oldPath 舊的文件名字
+	 * @param newPath 新的文件名字
 	 */
 	public static void renameFile(String oldPath, String newPath) {
 
@@ -844,6 +781,5 @@ public class FileUtil {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }

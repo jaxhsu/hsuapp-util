@@ -356,8 +356,7 @@ public class StringUtil {
 		for (int w = 0; w < string.length(); w++) {
 			char ch = chars[w];
 			if (ch >= '\u0391' && ch <= '\uFFE5') {
-				length++;
-				length++;
+				length += 2;
 			} else {
 				length++;
 			}
